@@ -2,7 +2,7 @@ import boto3
 from botocore.exceptions import ClientError
 from app.config import Config
 
-class StorageService:
+class S3StorageService:
     def __init__(self):
         self.s3 = boto3.client(
             "s3",
