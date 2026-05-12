@@ -1,2 +1,2 @@
 # KnowledgeSystem
-Naive_Simple Rag system to provide knowledge
+Naive_Simple Rag type system to provide knowledge
