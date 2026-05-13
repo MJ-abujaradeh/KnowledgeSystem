@@ -34,7 +34,7 @@ def process_file(file):
     try:
         file.save(temp_path)
 
-        if file.filename.endwith(".pdf"):
+        if file.filename.endswith(".pdf"):
             loader = PyPDFLoader(temp_path)
             documents = loader.load()
         elif file.filename.endswith(".txt"):
@@ -82,7 +82,7 @@ def upload_document():
 
         try:
             text_chunks = process_file(file)
-            logger.debug(f"Chunck created successfully, number of chunks: {len(text_chunks)}")
+            logger.debug(f"Chunks created successfully, number of chunks: {len(text_chunks)}")
         except Exception as e:
             logger.error(f"Error processing file chunks: {e}")
             return jsonify({'error': f'An error occurred while processing the file: {e}'}), 500
@@ -126,7 +126,7 @@ def query():
         
         try:
             response = llm_service.get_response(data['question'])
-            return jsonify({{'response': response}}), 200
+            return jsonify({'response': response})
         except Exception as e: 
             logger.error(f"Error getting response from LLM: {e}")
             return jsonify({'error': f'An error occurred while getting response from LLM: {e}'}), 500

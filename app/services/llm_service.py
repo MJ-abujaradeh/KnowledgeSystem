@@ -24,8 +24,8 @@ class LLMService:
 
     def get_response(self, query):
         try:
-            response = self.chain.run(query)
-            return response["answer"]
+            response = self.chain({"question":query})
+            return response['answer']
         except Exception as e:
             print(f" Error getting LLM response: {e}")
-            return "Sorry, I couldn't process your request at the moment."
+            return "Sorry, I couldn't process your request at the moment."     
