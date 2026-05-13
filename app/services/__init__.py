@@ -1,0 +1,1 @@
+print("KnowledgeSystem initialized - Services")

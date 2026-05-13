@@ -7,10 +7,18 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import tempfile
 import logging
 import os
+from flask import Flask, request, render_template, jsonify
+
+app = Flask(__name__)
 
 vector_store = VectoreStore(Config.VECTOR_DB_PATH)
 storage_service = S3StorageService()
 llm_service = LLMService(vector_store)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 
 # configure logging
 logging.basicConfig(level = logging.DEBUG)
@@ -45,11 +53,47 @@ def process_file(file):
     
     except Exception as e:
         logger.error(f"Error processing file: {e}")
-        
+
     finally:
         if(os.path.exists(temp_path)):
             os.remove(temp_path)
         os.rmdir(temp_dir)
             
 
+@app.route("/upload", methods=["POST"])
+def upload_document():
+    try:
+        logger.debug("Upload route is called");
+
+        if "file" not in request.files:
+            logger.warning("No file part in the request")
+            return jsonify({'error': 'No file part in the request'}), 400
+        
+        file = request.files["file"]
+        if(file.filename == ""):
+            logger.warning("Empty file name")
+            return jsonify({'error': 'No file selected for uploading'}), 400
+        
+        if not file.filename.endswith((".pdf", ".txt")):
+            logger.warning(f"Unsupported file type: {file.filename}")
+            return jsonify({'error': f'Unsupported file type. Only PDF and TXT are allowed. {file.filename}'}), 400
+    
+        logger.debug(f"Processing file Started ... : {file.filename}")
+        storage_result = storage_service.upload_file(file, file.filename)
+        if storage_result is False:
+            logger.error("Failed to upload file to S3")
+            return jsonify({'error': 'Failed to upload file to storage'}), 500
+        
+        text_chunks = process_file(file)
+        vector_store.add_documents(text_chunks)
+
+    except Exception as e: 
+        logger.error(f"Error in upload route: {e}")
+        return jsonify({'error': f'An error occurred while uploading the file: {e}'}), 500 
+    
+    return jsonify({'message': 'File uploaded and processed successfully'}), 200
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=1982, debug=True)
 

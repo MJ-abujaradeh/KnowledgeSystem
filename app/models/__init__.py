@@ -1,0 +1,1 @@
+print("KnowledgeSystem initialized - Vectore store")
