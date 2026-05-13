@@ -54,6 +54,9 @@
                 console.error('Error:', error);
                 alert('Error uploading files');
             }
+            finally {
+                document.getElementById('file-input').value = '';
+            }
         });
 
         document.getElementById('submit-question').addEventListener('click', async () => {
@@ -74,6 +77,10 @@
                 console.error('Error:', error);
                 alert('Error getting response');
             }
+            finally {
+                document.getElementById('question-input').value = '';
+            }
+            
         });
     </script>
 </body>
