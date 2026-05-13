@@ -10,7 +10,8 @@ class VectoreStore:
         );
         self.vector_store = Chroma(
             persist_directory = path,
-            embedding_function = self.embeddings
+            embedding_function = self.embeddings,
+            collection_name = "knowledge_system_collection"
         )
         
     def add_documents(self, documents):
