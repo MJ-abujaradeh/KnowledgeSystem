@@ -1,7 +1,7 @@
 import chromadb
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
-from app.config import Config
+from config import Config
 class VectoreStore:
     def __init__(self, path):
         self.embeddings = OpenAIEmbeddings(
