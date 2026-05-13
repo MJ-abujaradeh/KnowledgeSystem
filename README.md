@@ -60,20 +60,35 @@ KnowledgeSystem/
 
 ---
 
+
+
 ## 🧩 Architecture Overview
 
 Below is a high-level architecture diagram of the application:
 
-```mermaid
-graph TD
-	 A[User Interface (HTML/CSS)] --> B[Flask App (main.py)]
-	 B --> C[LLM Service]
-	 B --> D[Vector Store]
-	 C --> E[OpenAI API]
-	 D --> F[Storage Service]
-	 B --> G[Templates/Static Files]
-	 G --> H[style.css]
-	 G --> I[index.html]
+```
+╭──────────────────────────────╮
+│      User Interface          │
+│        (HTML/CSS)           │
+╰─────────────┬────────────────╯
+		  │
+		  ▼
+	╭───────────────────────╮
+	│     Flask App         │
+	│     (main.py)         │
+	╰─────┬─────┬─────┬─────╯
+		│     │     │
+		▼     ▼     ▼
+   ╭────────────╮ ╭───────────────╮ ╭────────────────────╮
+   │  LLM       │ │  Vector Store │ │ Templates/Static   │
+   │  Service   │ │               │ │ Files              │
+   ╰────┬───────╯ ╰──────┬────────╯ ╰─────────┬──────────╯
+	  │                │                    │
+	  ▼                ▼                    ▼
+  ╭────────────╮   ╭──────────────╮     ╭──────────────╮
+  │ OpenAI API │   │ Storage      │     │ style.css    │
+  ╰────────────╯   │ Service      │     │ index.html   │
+			 ╰──────────────╯     ╰──────────────╯
 ```
 
 ---
